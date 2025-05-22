@@ -1,7 +1,12 @@
 from googlesearch import search
 import streamlit as st
 
-st.set_page_config(layout="wide")
+
+# PAGE CONFIG
+st.set_page_config(layout="wide",
+                   page_title="Google",
+                   page_icon="content/google.ico",
+                   initial_sidebar_state="collapsed")
 
 src,o=st.tabs(["Search","other"])
 
@@ -10,7 +15,7 @@ lg=st.sidebar.selectbox("Search Language",["fr","en"])
 nbr=st.sidebar.slider("Result Number",2,80,value=10)
 
 
-
+# --- Functions
 def google_search(query):
     cols=[]
     for k in search(query, lang=lg, num_results=nbr,advanced=True):
