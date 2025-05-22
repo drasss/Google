@@ -1,37 +1,32 @@
 from googlesearch import search
-import requests
-from bs4 import BeautifulSoup as bs
-import urllib.request, urllib.error, urllib.parse,os
-        
-def google_search(query,pages):
-    result=[]
-    i=0
-    for k in search(query, lang="en", num=pages, stop=10, pause=2):
-        result+=[k]
-        print("\n\n",i+1,") ",k)
-        i+=1
-    return(result)
-        
-def google_open(url):
+import streamlit as st
 
-    reponse = urllib.request.urlopen(url)
-    contenu_web = reponse.read().decode('UTF-8')
+st.set_page_config(layout="wide")
 
-    f = open('temp.html', 'w')
-    f.write(contenu_web)
-    f.close
-    os.system("start temp.html")
-        
+src,o=st.tabs(["Search","other"])
 
-if __name__=="__main__":
-    choix=""
-    while choix.upper()!="QUIT":
-        choix=input("-------------\n --: ")
-        if choix.upper()!="QUIT":
-            print("------------- quel site voulez vous voir ?")
-            result=google_search(choix, 10)
-            site_nb=int(input(""))
-            google_open(result[site_nb-1])
-        
-        
+#------------------ side bar parameters
+lg=st.sidebar.selectbox("Langue de recherche",["fr","en"])
+
+
+
+
+def google_search(query):
+    cols=[]
+    for k in search(query, lang=lg, num_results=10,advanced=True):
+        if "http" in k.url:
+            cols+=[src.columns([1,8])]
+            cols[-1][0].link_button("GO",url=k.url)
+            cols[-1][1].title(k.title)
+            src.text(k.description)
+            src.divider()
+
+
+
+#---------------------- main page : search
+para=src.columns([10,100])
+choice=para[1].text_input("Google search")
+
+launch=para[0].button("Search",on_click=google_search, args=(choice,),type="primary")
+
         
