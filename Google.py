@@ -6,14 +6,14 @@ st.set_page_config(layout="wide")
 src,o=st.tabs(["Search","other"])
 
 #------------------ side bar parameters
-lg=st.sidebar.selectbox("Langue de recherche",["fr","en"])
-
+lg=st.sidebar.selectbox("Search Language",["fr","en"])
+nbr=st.sidebar.slider("Result Number",2,80,value=10)
 
 
 
 def google_search(query):
     cols=[]
-    for k in search(query, lang=lg, num_results=10,advanced=True):
+    for k in search(query, lang=lg, num_results=nbr,advanced=True):
         if "http" in k.url:
             cols+=[src.columns([1,8])]
             cols[-1][0].link_button("GO",url=k.url)
